@@ -1,4 +1,4 @@
-name: "Jenkins-Action"
+name: "Jenkins-Action Deluxe"
 description: "Start Jenkins jobs and report back url and status of build"
 author: "Josh Levy-Kramer"
 inputs:
