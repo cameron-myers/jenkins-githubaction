@@ -80,14 +80,16 @@ def main():
     t0 = time()
     sleep(interval)
     while time() - t0 < timeout:
-        result = build.result
-        if result == 'SUCCESS':
-            logging.info(f'Build successful 🎉')
-            return
-        elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
-            raise Exception(f'Build status returned "{result}". Build has failed ☹️.')
-        logging.info(f'Build not finished yet. Waiting {interval} seconds. {build_url}')
-        sleep(interval)
+        if build.building:
+            logging.info(f'Build not finished yet. Waiting {interval} seconds. {build_url}')
+            sleep(interval)
+        else:
+            result = build.result
+            if result == 'SUCCESS':
+                logging.info(f'Build successful 🎉')
+                return
+            elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
+                raise Exception(f'Build status returned "{result}". Build has failed ☹️.')
     else:
         raise Exception(f"Build has not finished and timed out. Waited for {timeout} seconds.")
 
