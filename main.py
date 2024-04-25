@@ -108,7 +108,7 @@ def add_workflow_job_summary(cov, branches) :
     """
     if "GITHUB_STEP_SUMMARY" in os.environ :
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f :
-            print(markdownSummaryTemplate.format(cov, branches), file=f)
+            print("Hello World", file=f)
 
     return
 if __name__ == "__main__":
