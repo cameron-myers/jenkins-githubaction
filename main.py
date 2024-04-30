@@ -91,11 +91,10 @@ def main():
             result = build.result
             if result == 'SUCCESS':
                 logging.info(f'Build successful 🎉')
-                add_workflow_job_summary(12,34)
                 return
             elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
-                add_workflow_job_summary(12,34)
                 raise Exception(f'Build status returned \"{result}\". Build has failed ☹️.')
+            add_workflow_job_summary(12,34)
             
     else:
         raise Exception(f"Build has not finished and timed out. Waited for {timeout} seconds.")
@@ -109,10 +108,12 @@ def add_workflow_job_summary(cov, branches) :
     """
     if "GITHUB_STEP_SUMMARY" in os.environ :
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f :
-            logging.info(f'File FOUND: GITHUB_STEP_SUMMARY')
             print(markdownSummaryTemplate, file=f)
+            print(f"::notice title=FILE FOUND::")
+            logging.info(f'File FOUND: GITHUB_STEP_SUMMARY')
+
     else:
-        logging.info(f'File Not Found Error: GITHUB_STEP_SUMMARY')
+        logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
     return
 if __name__ == "__main__":
     main()
