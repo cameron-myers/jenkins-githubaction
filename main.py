@@ -10,8 +10,9 @@ logging.basicConfig(format='JENKINS_ACTION:')
 def add_workflow_job_summary(test_results):
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
-            for suite in test_results: # same as `for suite in tr.suites`
-                print(suite, file=f)
+            suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
+            for case in suite:
+                print(case,file=f)
 
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
