@@ -7,12 +7,11 @@ from time import time, sleep
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
 
-def add_workflow_job_summary(cov, branches):
+def add_workflow_job_summary(test_results):
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
-            print("Hello World", file=f)
-            print(f"::notice title=FILE FOUND::")
-            logging.info(f'File FOUND: GITHUB_STEP_SUMMARY')
+            for suite in test_results: # same as `for suite in tr.suites`
+                print(suite, file=f)
 
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
@@ -96,7 +95,8 @@ def main():
             sleep(interval)
         else:
             result = build.result
-            add_workflow_job_summary(12,34)
+            test_results = build.get_test_report()
+            add_workflow_job_summary(test_results)
             if result == 'SUCCESS':
                 logging.info(f'Build successful 🎉')
                 return
