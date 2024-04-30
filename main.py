@@ -109,7 +109,8 @@ def add_workflow_job_summary(cov, branches) :
     """
     if "GITHUB_STEP_SUMMARY" in os.environ :
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f :
-            print("Hello World", file=f)
+            logging.info(f'File FOUND: GITHUB_STEP_SUMMARY')
+            print(markdownSummaryTemplate, file=f)
     else:
         logging.info(f'File Not Found Error: GITHUB_STEP_SUMMARY')
     return
