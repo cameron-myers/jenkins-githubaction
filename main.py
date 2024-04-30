@@ -91,10 +91,12 @@ def main():
             result = build.result
             if result == 'SUCCESS':
                 logging.info(f'Build successful 🎉')
+                add_workflow_job_summary(12,34)
                 return
             elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
+                add_workflow_job_summary(12,34)
                 raise Exception(f'Build status returned \"{result}\". Build has failed ☹️.')
-            add_workflow_job_summary(12,34)
+            
     else:
         raise Exception(f"Build has not finished and timed out. Waited for {timeout} seconds.")
 
