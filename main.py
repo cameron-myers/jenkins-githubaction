@@ -12,7 +12,7 @@ def print_test_case_to_file(case, f):
 
     if(case.status == 'PASSED'):
         print(case.name + ": PASSED\n",file = f)
-    elif(case.status == 'FAILED'):
+    elif(case.status == 'FAILED' | 'REGRESSION'):
         print(case.name + ": FAILED\n" ,file = f)
         print("ERROR: " + case.errorDetails + "\n",file = f)
 
