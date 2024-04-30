@@ -15,7 +15,7 @@ inputs:
     description: "Jenkins API token"
     required: false
   parameters:
-    description: 'Build parameters in JSON format e.g. ''{"field": "${{env.variable}}"}'''
+    description: 'Build parameters in JSON format e.g. `{"field": "${{env.variable}}"}`'
     required: false
   cookies:
     description: 'Cookies to include in HTTP requests in JSON format e.g. `{"field1":"value1"}`'
