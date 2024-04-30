@@ -7,16 +7,25 @@ from time import time, sleep
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
 
+def print_test_case_to_file(case, f):
+    if(case.result == 'PASSED'):
+        print(case.name + ": PASSED\n",file = f)
+    elif(case.result == 'FAILED'):
+        print(case.name + ": FAILED\n" ,file = f)
+        print("ERROR: " + case.errorDetails + "\n",file = f)
+
+    return
+
 def add_workflow_job_summary(test_results):
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
             suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
             for case in suite:
-                print(case,file=f)
-
+                print_test_case_to_file(case.name,file=f)
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
     return
+
 
 def main():
     # Required
