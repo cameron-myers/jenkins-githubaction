@@ -23,7 +23,7 @@ def add_workflow_job_summary(test_results):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
             suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
             for case in suite:
-                print(dir(case), file = f)
+                print_test_case_to_file(case, f)
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
     return
