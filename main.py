@@ -5,7 +5,11 @@ import json
 from time import time, sleep
 
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
-logging.basicConfig(format='JENKINS_ACTION: %(message)s', level=log_level)
+logging.basicConfig(format='JENKINS_ACTION:')
+markdownSummaryTemplate = """## JaCoCo Test Coverage Summary
+                            * __Coverage:__ 1234
+                            * __Branches:__ 5678
+                            """
 
 def main():
     # Required
@@ -72,7 +76,7 @@ def main():
     logging.info(f"Build URL: {build_url}")
     print(f"::set-output name=build_url::{build_url}")
     print(f"::notice title=build_url::{build_url}")
-
+    
     if not wait:
         logging.info("Not waiting for build to finish.")
         return
@@ -87,12 +91,28 @@ def main():
             result = build.result
             if result == 'SUCCESS':
                 logging.info(f'Build successful 🎉')
+                add_workflow_job_summary(12,34)
                 return
             elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
-                raise Exception(f'Build status returned "{result}". Build has failed ☹️.')
+                add_workflow_job_summary(12,34)
+                raise Exception(f'Build status returned \"{result}\". Build has failed ☹️.')
+            
     else:
         raise Exception(f"Build has not finished and timed out. Waited for {timeout} seconds.")
 
+def add_workflow_job_summary(cov, branches) :
+    """Adds a job summary.
 
+    Keyword arguments:
+    cov - Coverage percentage
+    branches - Branches coverage percentage
+    """
+    if "GITHUB_STEP_SUMMARY" in os.environ :
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f :
+            logging.info(f'File FOUND: GITHUB_STEP_SUMMARY')
+            print(markdownSummaryTemplate, file=f)
+    else:
+        logging.info(f'File Not Found Error: GITHUB_STEP_SUMMARY')
+    return
 if __name__ == "__main__":
     main()

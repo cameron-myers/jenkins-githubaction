@@ -1,9 +1,9 @@
-name: "Jenkins-Action Deluxe"
-description: "Start Jenkins jobs and report back url and status of build"
-author: "Josh Levy-Kramer"
+name: "Jenkins-Action with Test Data"
+description: "Start Jenkins jobs and report back url, status of build, and any test results"
+author: "Cameron Myers"
 inputs:
   url:
-    description: "Jenkins URL including http/https protocol"
+    description: "Jenkins URL including http protocol"
     required: true
   job_name:
     description: "Jenkins job name to build"
@@ -15,7 +15,7 @@ inputs:
     description: "Jenkins API token"
     required: false
   parameters:
-    description: 'Build parameters in JSON format e.g. `{"field1":"value1"}`'
+    description: 'Build parameters in JSON format e.g. ''{"field": "${{env.variable}}"}'''
     required: false
   cookies:
     description: 'Cookies to include in HTTP requests in JSON format e.g. `{"field1":"value1"}`'
@@ -39,6 +39,8 @@ inputs:
 outputs:
   build_url:
     description: "Jenkins build URL"
+  test_results:
+    description: "JUnit Test results from Jenkins Build"
 runs:
   using: "docker"
   image: "Dockerfile"
