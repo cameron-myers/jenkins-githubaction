@@ -8,9 +8,11 @@ log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
 
 def print_test_case_to_file(case, f):
-    if(case.result == 'PASSED'):
+    
+
+    if(case.status == 'PASSED'):
         print(case.name + ": PASSED\n",file = f)
-    elif(case.result == 'FAILED'):
+    elif(case.status == 'FAILED'):
         print(case.name + ": FAILED\n" ,file = f)
         print("ERROR: " + case.errorDetails + "\n",file = f)
 
