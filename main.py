@@ -7,13 +7,14 @@ from time import time, sleep
 
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
-gh_token = ""
-commit_sha = ""
+gh_token = os.environ["GH_TOKEN"]
+commit_sha = os.environ.get("GITHUB_SHA")
+
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
-        "Authorization": f"Bearer {gh_token}",
-        "Accept": "application/vnd.github.v3+json",
+        "authorization": f"Bearer {gh_token}",
+        "content-type": "application/json",
     }
     data = {
         "body": comment_body,
@@ -58,8 +59,6 @@ def main():
     # Required
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
-    gh_token = os.environ["GH_TOKEN"]
-    commit_sha = os.environ.get("GITHUB_SHA")
     # Optional
     username = os.environ.get("INPUT_USERNAME")
     api_token = os.environ.get("INPUT_API_TOKEN")
