@@ -2,10 +2,33 @@ import os
 from api4jenkins import Jenkins
 import logging
 import json
+import requests
 from time import time, sleep
 
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
+
+
+def comment_on_commit(commit_sha, comment_body):
+    url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    data = {
+        "body": comment_body,
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    if response.status_code == 201:
+        print("Comment added successfully!")
+    else:
+        print(f"Error adding comment: {response.status_code} - {response.text}")
+
+# Example usage
+commit_sha = "your_commit_sha_here"
+comment_body = "This is a test comment from GitHub Actions!"
+comment_on_commit(commit_sha, comment_body)
 
 def print_test_case_to_file(case, f):
     
@@ -33,7 +56,8 @@ def main():
     # Required
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
-
+    github_token = os.environ["INPUT_GH_TOKEN"]
+    commit_sha = os.environ["INPUT_GITHUB_SHA"]
     # Optional
     username = os.environ.get("INPUT_USERNAME")
     api_token = os.environ.get("INPUT_API_TOKEN")
