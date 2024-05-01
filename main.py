@@ -7,8 +7,8 @@ from time import time, sleep
 
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'INFO')
 logging.basicConfig(format='JENKINS_ACTION:')
-
-
+gh_token = ""
+commit_sha = ""
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
@@ -26,9 +26,7 @@ def comment_on_commit(commit_sha, comment_body):
         print(f"Error adding comment: {response.status_code} - {response.text}")
 
 # Example usage
-commit_sha = "your_commit_sha_here"
-comment_body = "This is a test comment from GitHub Actions!"
-comment_on_commit(commit_sha, comment_body)
+
 
 def print_test_case_to_file(case, f):
     
@@ -42,6 +40,10 @@ def print_test_case_to_file(case, f):
     return
 
 def add_workflow_job_summary(test_results):
+    comment_body = "This is a test comment from GitHub Actions!"
+    comment_on_commit(commit_sha, comment_body)
+
+
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
             suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
@@ -56,7 +58,7 @@ def main():
     # Required
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
-    github_token = os.environ["INPUT_GH_TOKEN"]
+    gh_token = os.environ["INPUT_GH_TOKEN"]
     commit_sha = os.environ["INPUT_GITHUB_SHA"]
     # Optional
     username = os.environ.get("INPUT_USERNAME")
