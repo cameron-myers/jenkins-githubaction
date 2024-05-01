@@ -12,7 +12,7 @@ commit_sha = ""
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Authorization": f"Bearer {gh_token}",
         "Accept": "application/vnd.github.v3+json",
     }
     data = {
@@ -59,7 +59,7 @@ def main():
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
     gh_token = os.environ["INPUT_GH_TOKEN"]
-    commit_sha = os.environ["INPUT_GITHUB_SHA"]
+    commit_sha = os.environ.get("GITHUB_SHA")
     # Optional
     username = os.environ.get("INPUT_USERNAME")
     api_token = os.environ.get("INPUT_API_TOKEN")
