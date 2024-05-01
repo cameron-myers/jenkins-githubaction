@@ -1,10 +1,9 @@
 name: "Jenkins-Action with Test Data"
 description: "Start Jenkins jobs and report back url, status of build, and any test results"
 author: "Cameron Myers"
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 inputs:
-  gh_token:
-    description: "Github Token"
-    required: true
   url:
     description: "Jenkins URL including http protocol"
     required: true

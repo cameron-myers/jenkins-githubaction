@@ -58,7 +58,7 @@ def main():
     # Required
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
-    gh_token = os.environ["INPUT_GH_TOKEN"]
+    gh_token = os.environ["GH_TOKEN"]
     commit_sha = os.environ.get("GITHUB_SHA")
     # Optional
     username = os.environ.get("INPUT_USERNAME")
