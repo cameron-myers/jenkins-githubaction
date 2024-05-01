@@ -14,7 +14,7 @@ def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
         "authorization": f"Bearer {gh_token}",
-        "accept": "application/vnd.github+json",
+        "accept": "application/vnd.github-commitcomment.raw+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
     data = {
