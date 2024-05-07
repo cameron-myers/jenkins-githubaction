@@ -1,6 +1,8 @@
 name: "Jenkins-Action with Test Data"
 description: "Start Jenkins jobs and report back url, status of build, and any test results"
 author: "Cameron Myers"
+permissions:
+  contents: write
 
 inputs:
   url:
