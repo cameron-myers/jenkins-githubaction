@@ -33,7 +33,7 @@ def comment_on_commit(commit_sha, comment_body):
 def print_test_case_to_file(case, f):
     
 
-    if(case.status == 'PASSED'):
+    if(case.status == 'SUCCESS' or 'PASSED'):
         print(case.name + ": PASSED\n",file = f)
     elif(case.status == 'FAILED' or 'REGRESSION'):
         print(case.name + ": FAILED\n" ,file = f)
