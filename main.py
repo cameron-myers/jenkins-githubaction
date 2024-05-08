@@ -32,7 +32,6 @@ def comment_on_commit(commit_sha, comment_body):
 
 def print_test_case_to_file(case, f):
     
-
     if(case.status == 'SUCCESS' or 'PASSED'):
         print(case.name + ": PASSED\n",file = f)
     elif(case.status == 'FAILED' or 'REGRESSION'):
@@ -41,16 +40,59 @@ def print_test_case_to_file(case, f):
 
     return
 
+def has_class(case, sections):
+    for className in sections:
+        if className == case.class_name:
+            return True
+        
+    return False
+
+def get_failed_sections(suite):
+    sections = []
+    #get a list of failed classes
+    for case in suite:
+        if not has_class(case, sections):
+            sections.append(case.class_name)
+    return sections
+
+def get_failed_tests(section, suite):
+    tests = ["\0"]
+    for case in suite:
+        if case.class_name == section:
+            tests.append(case.name)
+
+    return tests
+
 def add_workflow_job_summary(test_results):
-    comment_body = "This is a test comment from GitHub Actions!"
+    
+    #Format
+    #Summary:Total Tests, Passes, Fails, RunTime
+    #Section passed just show that
+    #Section fails show section and list tests that failed
+    comment_body = "\0"
+    suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
+
+    runtime = test_results.get('duration')
+    tests_passed = test_results.get('failCount')
+    tests_failed = test_results.get('passCount')
+    total_tests = tests_passed + tests_failed
+
+    
+    comment_body = "Total Tests: " + total_tests + "\n :white_check_mark: Passed: " + tests_passed + "\n :x: Failed: "
+    + tests_failed + "\n Runtime: " + runtime
+
+    if(tests_failed > 0):
+        failed_sections = get_failed_sections(suite)
+        for section in failed_sections:
+            comment_body += "\n FAILED SECTIONS: \n" + section
+            for test in get_failed_tests(section, suite):
+                comment_body += "\n :x:" + test
+    
     comment_on_commit(commit_sha, comment_body)
-
-
+    
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
-            suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
-            for case in suite:
-                print_test_case_to_file(case, f)
+            print(comment_body, f)
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
     return
