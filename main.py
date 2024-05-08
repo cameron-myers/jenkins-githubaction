@@ -75,7 +75,7 @@ def add_workflow_job_summary(test_results):
     runtime = test_results.get('duration')
     tests_passed = test_results.get('failCount')
     tests_failed = test_results.get('passCount')
-    total_tests = tests_passed + tests_failed
+    total_tests = int(tests_passed) + int(tests_failed)
 
     
     comment_body = "Total Tests: " + total_tests + "\n :white_check_mark: Passed: " + tests_passed + "\n :x: Failed: "
