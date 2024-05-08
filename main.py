@@ -72,7 +72,8 @@ def add_workflow_job_summary(test_results):
     comment_body = "\0"
     suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
 
-    runtime = test_results.duration
+    runtime = 0
+    #test_results.duration
     tests_passed = test_results.fail_count
     tests_failed = test_results.pass_count
     total_tests = int(tests_passed) + int(tests_failed)
