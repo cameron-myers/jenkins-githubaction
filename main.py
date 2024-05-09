@@ -56,11 +56,11 @@ def get_failed_sections(suite):
     return sections
 
 def get_failed_tests(section, suite):
-    tests = ["\0"]
+    tests = []
     for case in suite:
-        if case.class_name == section and (case.status == 'FAILED' or 'REGRESSION'):
-            tests.append(case.name)
-
+        if case.class_name == section:
+            if (case.status == 'FAILED' or 'REGRESSION'):
+                tests.append(case.name)
     return tests
 
 def add_workflow_job_summary(test_results):
