@@ -51,14 +51,14 @@ def get_failed_sections(suite):
     sections = []
     #get a list of failed classes
     for case in suite:
-        if not has_class(case, sections):
+        if case.status == 'FAILED' or 'REGRESSION' and not has_class(case, sections):
             sections.append(case.class_name)
     return sections
 
 def get_failed_tests(section, suite):
     tests = ["\0"]
     for case in suite:
-        if case.class_name == section:
+        if case.class_name == section and case.status == 'FAILED' or 'REGRESSION':
             tests.append(case.name)
 
     return tests
@@ -74,8 +74,8 @@ def add_workflow_job_summary(test_results):
 
     runtime = '0'
     #test_results.duration
-    tests_passed = test_results.fail_count
-    tests_failed = test_results.pass_count
+    tests_passed = test_results.pass_count 
+    tests_failed = test_results.fail_count
     total_tests = int(tests_passed) + int(tests_failed)
 
     
