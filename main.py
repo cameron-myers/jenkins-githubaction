@@ -84,9 +84,11 @@ def add_workflow_job_summary(test_results):
 
     if(tests_failed > 0):
         failed_sections = get_failed_sections(suite)
+        for case in suite:
+            comment_body += case.class_name
         comment_body +="\n ### FAILED SECTIONS:"
         for section in failed_sections:
-            comment_body += "\n " + section
+            comment_body += "\n ### " + section
             for test in get_failed_tests(str(section), suite):
                 comment_body += "\n :x:" + test
     
