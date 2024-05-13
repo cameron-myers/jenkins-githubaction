@@ -42,9 +42,8 @@ def print_test_case_to_file(case, f):
 
 def has_class(case, sections):
     for className in sections:
-        if className == case.class_name:
+        if str(className) == str(case.class_name):
             return True
-        
     return False
 
 def get_failed_sections(suite):
@@ -52,17 +51,15 @@ def get_failed_sections(suite):
     #get a list of failed classes
     for case in suite:
         if (case.status == 'FAILED' or 'REGRESSION'):
-            print(case)
             if not has_class(case, sections):
                 sections.append(case.class_name)
-                break
-            
+
     return sections
 
 def get_failed_tests(section, suite):
     tests = []
     for case in suite:
-        if case.class_name == section:
+        if str(case.class_name) == section:
             if (case.status == 'FAILED' or 'REGRESSION'):
                 tests.append(case.name)
 
@@ -90,7 +87,7 @@ def add_workflow_job_summary(test_results):
         comment_body +="\n ### FAILED SECTIONS:"
         for section in failed_sections:
             comment_body += "\n " + section
-            for test in get_failed_tests(section, suite):
+            for test in get_failed_tests(str(section), suite):
                 comment_body += "\n :x:" + test
     
     
