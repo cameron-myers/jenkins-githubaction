@@ -12,4 +12,4 @@ FROM gcr.io/distroless/python3-debian10
 COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
-RUN python -u /app/main.py
+CMD "python -u /app/main.py"
