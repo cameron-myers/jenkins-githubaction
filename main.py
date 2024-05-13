@@ -55,6 +55,8 @@ def get_failed_sections(suite):
             print(case)
             if not has_class(case, sections):
                 sections.append(case.class_name)
+                break
+            
     return sections
 
 def get_failed_tests(section, suite):
@@ -63,6 +65,7 @@ def get_failed_tests(section, suite):
         if case.class_name == section:
             if (case.status == 'FAILED' or 'REGRESSION'):
                 tests.append(case.name)
+
     return tests
 
 def add_workflow_job_summary(test_results):
@@ -90,13 +93,14 @@ def add_workflow_job_summary(test_results):
             for test in get_failed_tests(section, suite):
                 comment_body += "\n :x:" + test
     
-    comment_on_commit(commit_sha, comment_body)
     
     if "GITHUB_STEP_SUMMARY" in os.environ:
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
             print(comment_body, f)
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
+
+    comment_on_commit(commit_sha, comment_body)
     return
 
 
