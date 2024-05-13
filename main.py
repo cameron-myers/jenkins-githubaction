@@ -42,8 +42,11 @@ def print_test_case_to_file(case, f):
 
 def has_class(case, sections):
     for className in sections:
+        logging.info('class name in:' + className)
+        logging.info('class name cmp:' + case.class_name)
         if str(className) == str(case.class_name):
             return True
+        
     return False
 
 def get_failed_sections(suite):
@@ -84,8 +87,6 @@ def add_workflow_job_summary(test_results):
 
     if(tests_failed > 0):
         failed_sections = get_failed_sections(suite)
-        for case in suite:
-            comment_body += case.class_name
         comment_body +="\n ### FAILED SECTIONS:"
         for section in failed_sections:
             comment_body += "\n ### " + section
