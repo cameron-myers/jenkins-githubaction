@@ -11,7 +11,9 @@ gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
 global comment_body
 
-def comment_on_commit(commit_sha, comment_body):
+def comment_on_commit(commit_sha, body):
+    global comment_body
+
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
         "authorization": f"Bearer {gh_token}",
@@ -19,7 +21,7 @@ def comment_on_commit(commit_sha, comment_body):
         "X-GitHub-Api-Version": "2022-11-28"
     }
     data = {
-        "body": comment_body,
+        "body": body,
     }
 
     response = requests.post(url, json=data, headers=headers)
@@ -40,7 +42,8 @@ def print_test_case_to_file(case, f):
     return
 
 def has_class(case, sections):
-    
+    global comment_body
+
     for className in sections:
         comment_body += '\n class name in:' + className
         comment_body += '\n class name cmp:' + case.class_name
@@ -72,6 +75,7 @@ def get_failed_tests(section, suite):
 
 def add_workflow_job_summary(test_results):
     
+    global comment_body
 
     #Format
     #Summary:Total Tests, Passes, Fails, RunTime
