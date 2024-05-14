@@ -6,8 +6,7 @@ import requests
 from time import time, sleep
 
 log_level = os.environ.get('INPUT_LOG_LEVEL', 'DEBUG')
-logging.basicConfig(format='JENKINS_ACTION:')
-logger = logging.getLogger("main")
+
 gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
 
@@ -28,9 +27,6 @@ def comment_on_commit(commit_sha, comment_body):
     else:
         print(f"Error adding comment: {response.status_code} - {response.text}")
 
-# Example usage
-
-
 def print_test_case_to_file(case, f):
     
     if(case.status == 'SUCCESS' or 'PASSED'):
@@ -43,8 +39,8 @@ def print_test_case_to_file(case, f):
 
 def has_class(case, sections):
     for className in sections:
-        logger.info('class name in:' + className)
-        logger.info('class name cmp:' + case.class_name)
+        logging.info('class name in:' + className)
+        logging.info('class name cmp:' + case.class_name)
         if str(className) == str(case.class_name):
             return True
         
@@ -99,13 +95,15 @@ def add_workflow_job_summary(test_results):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
             print(comment_body, f)
     else:
-        logger.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
+        logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
 
     comment_on_commit(commit_sha, comment_body)
     return
 
 
 def main():
+    logging.basicConfig(format='JENKINS_ACTION:')
+    logging.info('TEST')
     # Required
     url = os.environ["INPUT_URL"]
     job_name = os.environ["INPUT_JOB_NAME"]
@@ -148,11 +146,11 @@ def main():
     except Exception as e:
         raise Exception('Could not connect to Jenkins.') from e
 
-    logger.info('Successfully connected to Jenkins.')
+    logging.info('Successfully connected to Jenkins.')
 
     queue_item = jenkins.build_job(job_name, **parameters)
 
-    logger.info('Requested to build job.')
+    logging.info('Requested to build job.')
 
     t0 = time()
     sleep(interval)
@@ -160,32 +158,32 @@ def main():
         build = queue_item.get_build()
         if build:
             break
-        logger.info(f'Build not started yet. Waiting {interval} seconds.')
+        logging.info(f'Build not started yet. Waiting {interval} seconds.')
         sleep(interval)
     else:
         raise Exception(f"Could not obtain build and timed out. Waited for {start_timeout} seconds.")
 
     build_url = build.url
-    logger.info(f"Build URL: {build_url}")
+    logging.info(f"Build URL: {build_url}")
     print(f"::set-output name=build_url::{build_url}")
     print(f"::notice title=build_url::{build_url}")
     
     if not wait:
-        logger.info("Not waiting for build to finish.")
+        logging.info("Not waiting for build to finish.")
         return
 
     t0 = time()
     sleep(interval)
     while time() - t0 < timeout:
         if build.building:
-            logger.info(f'Build not finished yet. Waiting {interval} seconds. {build_url}')
+            logging.info(f'Build not finished yet. Waiting {interval} seconds. {build_url}')
             sleep(interval)
         else:
             result = build.result
             test_results = build.get_test_report()
             add_workflow_job_summary(test_results)
             if result == 'SUCCESS':
-                logger.info(f'Build successful 🎉')
+                logging.info(f'Build successful 🎉')
                 return
             elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
                 raise Exception(f'Build status returned \"{result}\". Build has failed ☹️.')
