@@ -9,7 +9,7 @@ log_level = os.environ.get('INPUT_LOG_LEVEL', 'DEBUG')
 
 gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
-comment_body = ""
+comment_body = "-"
 
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
@@ -77,7 +77,6 @@ def add_workflow_job_summary(test_results):
     #Summary:Total Tests, Passes, Fails, RunTime
     #Section passed just show that
     #Section fails show section and list tests that failed
-    comment_body = "\0"
     suite = test_results.get('MSTestSuite')  # same as `for suite in tr.suites`
 
     #runtime = test_results.duration
@@ -86,7 +85,7 @@ def add_workflow_job_summary(test_results):
     total_tests = int(tests_passed) + int(tests_failed)
 
     
-    comment_body = "## Total Tests: " + str(total_tests) + "\n :white_check_mark: Passed:" + str(tests_passed) + "\n :x: Failed:" + str(tests_failed) + "\n Runtime:" #+ runtime
+    comment_body += "## Total Tests: " + str(total_tests) + "\n :white_check_mark: Passed:" + str(tests_passed) + "\n :x: Failed:" + str(tests_failed) + "\n Runtime:" #+ runtime
 
     if(tests_failed > 0):
         failed_sections = get_failed_sections(suite)
