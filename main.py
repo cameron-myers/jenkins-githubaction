@@ -57,7 +57,7 @@ def get_failed_sections(suite):
     sections = []
     #get a list of failed classes
     for case in suite:
-        if (case.status == 'FAILED' or 'REGRESSION'):
+        if (case.status == 'FAILED' or case.status == 'REGRESSION'):
             if not has_class(case, sections):
                 sections.append(case.class_name)
 
