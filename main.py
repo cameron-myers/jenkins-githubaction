@@ -45,8 +45,8 @@ def has_class(case, sections):
     global comment_body
 
     for className in sections:
-        comment_body += '\n class name in:' + className
-        comment_body += '\n class name cmp:' + case.class_name
+        #comment_body += '\n class name in:' + className
+        #comment_body += '\n class name cmp:' + case.class_name
         if str(className) == str(case.class_name):
             return True
         
