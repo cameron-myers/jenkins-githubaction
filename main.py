@@ -9,7 +9,7 @@ log_level = os.environ.get('INPUT_LOG_LEVEL', 'DEBUG')
 
 gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
-
+comment_body = ""
 
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
@@ -42,8 +42,8 @@ def print_test_case_to_file(case, f):
 def has_class(case, sections):
  
     for className in sections:
-        logging.info('class name in:' + className)
-        logging.info('class name cmp:' + case.class_name)
+        comment_body += '\n class name in:' + className
+        comment_body += '\n class name cmp:' + case.class_name
         if str(className) == str(case.class_name):
             return True
         
