@@ -9,7 +9,7 @@ log_level = os.environ.get('INPUT_LOG_LEVEL', 'DEBUG')
 
 gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
-comment_body = "-"
+global comment_body
 
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
@@ -40,7 +40,7 @@ def print_test_case_to_file(case, f):
     return
 
 def has_class(case, sections):
- 
+    
     for className in sections:
         comment_body += '\n class name in:' + className
         comment_body += '\n class name cmp:' + case.class_name
@@ -85,11 +85,11 @@ def add_workflow_job_summary(test_results):
     total_tests = int(tests_passed) + int(tests_failed)
 
     
-    comment_body += "## Total Tests: " + str(total_tests) + "\n :white_check_mark: Passed:" + str(tests_passed) + "\n :x: Failed:" + str(tests_failed) + "\n Runtime:" #+ runtime
+    comment_body = "## Total Tests: " + str(total_tests) + "\n :white_check_mark: Passed:" + str(tests_passed) + "\n :x: Failed:" + str(tests_failed) + "\n Runtime:" #+ runtime
 
     if(tests_failed > 0):
         failed_sections = get_failed_sections(suite)
-        comment_body +="\n ### FAILED SECTIONS:"
+        comment_body += "\n ### FAILED SECTIONS:"
         for section in failed_sections:
             comment_body += "\n ### " + section
             for test in get_failed_tests(str(section), suite):
