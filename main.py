@@ -10,6 +10,7 @@ log_level = os.environ.get('INPUT_LOG_LEVEL', 'DEBUG')
 gh_token = os.environ["GH_TOKEN"]
 commit_sha = os.environ.get("GITHUB_SHA")
 
+
 def comment_on_commit(commit_sha, comment_body):
     url = f"https://api.github.com/repos/cameron-myers/MayhemEngine/commits/{commit_sha}/comments"
     headers = {
@@ -27,17 +28,19 @@ def comment_on_commit(commit_sha, comment_body):
     else:
         print(f"Error adding comment: {response.status_code} - {response.text}")
 
+
 def print_test_case_to_file(case, f):
     
     if(case.status == 'SUCCESS' or 'PASSED'):
-        print(case.name + ": PASSED\n",file = f)
+        print(case.name + ": PASSED\n", file = f)
     elif(case.status == 'FAILED' or 'REGRESSION'):
-        print(case.name + ": FAILED\n" ,file = f)
-        print("ERROR: " + case.error_details + "\n",file = f)
+        print(case.name + ": FAILED\n" , file = f)
+        print("ERROR: " + case.error_details + "\n", file = f)
 
     return
 
 def has_class(case, sections):
+ 
     for className in sections:
         logging.info('class name in:' + className)
         logging.info('class name cmp:' + case.class_name)
@@ -47,6 +50,7 @@ def has_class(case, sections):
     return False
 
 def get_failed_sections(suite):
+
     sections = []
     #get a list of failed classes
     for case in suite:
@@ -57,6 +61,7 @@ def get_failed_sections(suite):
     return sections
 
 def get_failed_tests(section, suite):
+
     tests = []
     for case in suite:
         if str(case.class_name) == section:
@@ -67,6 +72,7 @@ def get_failed_tests(section, suite):
 
 def add_workflow_job_summary(test_results):
     
+
     #Format
     #Summary:Total Tests, Passes, Fails, RunTime
     #Section passed just show that
