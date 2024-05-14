@@ -195,7 +195,7 @@ def main():
                 logging.info(f'Build successful 🎉')
                 return
             elif result in ('FAILURE', 'ABORTED', 'UNSTABLE'):
-                raise Exception(f'Build status returned \"{result}\". Build has failed ☹️.')
+                raise Exception(f'Build status returned \"' + result + ' \". Build has failed ☹️.')
             
     else:
         raise Exception(f"Build has not finished and timed out. Waited for {timeout} seconds.")
