@@ -1,6 +1,6 @@
 # Jenkins GitHub Action
 
-Start Jenkins jobs with GitHub actions. Reports back the Jenkins URL and status of the build.
+Start Jenkins jobs with GitHub actions. Reports back the Jenkins URL, Status, comments Test Results on Commit
 
 ## Usage
 
