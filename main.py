@@ -77,6 +77,7 @@ def add_workflow_job_summary(test_results):
     
     global comment_body
 
+
     #Format
     #Summary:Total Tests, Passes, Fails, RunTime
     #Section passed just show that
@@ -106,7 +107,6 @@ def add_workflow_job_summary(test_results):
     else:
         logging.error(f'File Not Found Error: GITHUB_STEP_SUMMARY')
 
-    comment_on_commit(commit_sha, comment_body)
     return
 
 
@@ -189,8 +189,12 @@ def main():
             sleep(interval)
         else:
             result = build.result
-            test_results = build.get_test_report()
-            add_workflow_job_summary(test_results)
+            if(result == ('FAILURE', 'ABORTED', 'UNSTABLE')):
+                comment_body = "Build Failed!"
+            else:
+                test_results = build.get_test_report()
+                add_workflow_job_summary(test_results)
+            comment_on_commit(commit_sha, comment_body)
             if result == 'SUCCESS':
                 logging.info(f'Build successful 🎉')
                 return
