@@ -111,6 +111,7 @@ def add_workflow_job_summary(test_results):
 
 
 def main():
+    global comment_body
     logging.basicConfig(format='JENKINS_ACTION:')
     logging.info('TEST')
     # Required
