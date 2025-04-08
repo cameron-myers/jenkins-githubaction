@@ -148,13 +148,12 @@ def main():
             raise Exception('`cookies` is not valid JSON.') from e
     else:
         cookies = {}
-
-    jenkins = Jenkins(url, auth=auth, cookies=cookies)
-
+    
     try:
+        jenkins = Jenkins(url, auth=auth, cookies=cookies)
         jenkins.version
     except Exception as e:
-        raise Exception('Could not connect to Jenkins.') from e
+        raise Exception(f'Could not connect to Jenkins: {str(e)}') from e
 
     logging.info('Successfully connected to Jenkins.')
 
